@@ -2,23 +2,31 @@ const fs = require("fs");
 const sharp = require("sharp");
 const recursive = require("recursive-readdir");
 const IMAGES_FOLDER = "./images/";
-const fromJpegToWebpExt = (image) => image.replace(".jpg", ".webp");
+const fromOrigianlToNewFormat = ({ imagename, format }) => {
+  imagename.replace(".jpg", format);
+  imagename.replace(".png", format);
+}
+const formats = ["jpeg", "webp", "avif"];
 
 sharp.cache(false);
 
 recursive(IMAGES_FOLDER, (err, files) => {
   if (err) throw new Error(err);
 
-  const images = files.filter((file) => /\.(jpg)$/i.test(file));
+  const images = files.filter((file) => /\.(jpg|png)$/i.test(file));
 
-  images.forEach(async (image) => {
-    const optimizedImage = await sharp(image).webp({ effort: 6 }).toBuffer();
+  images.forEach((image) => {
+    const imagename = image.split(".").slice(0, -1).join(".");
 
-    const webpImage = fromJpegToWebpExt(image);
-    fs.writeFile(webpImage, optimizedImage, (err) => {
-      if (err) console.error(err);
+    formats.forEach(async (format) => {
+      const optimizedImage = await sharp(image)[format]().toBuffer();
 
-      console.log("✅", webpImage);
+      const newImageName = `${imagename}.${format}`;
+      fs.writeFile(newImageName, optimizedImage, (err) => {
+        if (err) console.error(err);
+
+        console.log("✅", newImageName);
+      });
     });
   });
 });
