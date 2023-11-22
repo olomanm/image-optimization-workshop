@@ -1,0 +1,17 @@
+{
+  "name": "image-optimization-workshop",
+  "version": "1.0.0",
+  "description": "[![Joan Leon](./assets/JoanLeon.jpg)](https://slides.com/joanleon/nucliweb)",
+  "main": "index.js",
+  "scripts": {
+    "imageoptim": "node scripts/imageoptim.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "recursive-readdir": "^2.2.3",
+    "sharp": "^0.32.6"
+  }
+}
